@@ -10,11 +10,12 @@ class TasksController < ApplicationController
   end
 
   def create
-    task = Task.new(task_params)
-    if task.save
-      render status: :ok, json: { notice: "Task was successfully created" }
+    @task = Task.new(task_params.merge(creator_id: @current_user.id))
+    authorize @task
+    if @task.save
+      render status: :ok, json: { notice: t("successfully_created", entity: "Task") }
     else
-      errors = task.errors.full_messages.to_sentence
+      errors = @task.errors.full_messages.to_sentence
       render status: :unprocessable_entity, json: { errors: errors }
     end
   end
