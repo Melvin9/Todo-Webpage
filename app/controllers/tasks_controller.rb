@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class TasksController < ApplicationController
+  before_action :authenticate_user_using_x_auth_token, except: [:new, :edit]
+
   before_action :load_task, only: %i[show update destroy]
 
   def index
@@ -10,8 +12,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params.merge(creator_id: @current_user.id))
-    authorize @task
+    @task = Task.new(task_params.merge(user_id: @current_user.id))
     if @task.save
       render status: :ok, json: { notice: t("successfully_created", entity: "Task") }
     else
