@@ -16,8 +16,7 @@ const TableRow = ({ data, users, destroyTask, showTask }) => {
             className="px-6 py-4 text-sm font-medium
             leading-5 text-gray-900 whitespace-no-wrap"
           >
-            {users.filter(user => user.id === rowData.user_id).length > 0 &&
-              users.filter(user => user.id === rowData.user_id)[0].name}
+            {rowData.user_id}
           </td>
           <td
             className="px-6 py-4 text-sm font-medium
