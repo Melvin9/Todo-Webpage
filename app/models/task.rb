@@ -2,7 +2,7 @@
 
 class Task < ApplicationRecord
   RESTRICTED_ATTRIBUTES = %i[title user_id]
-  validates :title, presence: true
+  validates :title, presence: true, length: { maximum: 50 }
   enum progress: { pending: 0, completed: 1 }
   enum status: { unstarred: 0, starred: 1 }
 
