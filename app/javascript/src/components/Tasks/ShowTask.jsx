@@ -16,6 +16,16 @@ const ShowTask = () => {
 
   let history = useHistory();
 
+  const destroyTask = async () => {
+    try {
+      await tasksApi.destroy(task.slug);
+    } catch (error) {
+      logger.error(error);
+    } finally {
+      history.push("/");
+    }
+  };
+
   const updateTask = () => {
     history.push(`/tasks/${task.slug}/edit`);
   };
@@ -35,7 +45,7 @@ const ShowTask = () => {
     event.preventDefault();
     try {
       await commentsApi.create({
-        comment: { content: newComment, task_id: task?.id }
+        comment: { content: newComment, task_id: task.id }
       });
       fetchTaskDetails();
       setNewComment("");
@@ -63,6 +73,11 @@ const ShowTask = () => {
         <div className="bg-bb-env px-2 mt-2 mb-4 rounded">
           <i
             className="text-2xl text-center transition duration-300
+             ease-in-out ri-delete-bin-5-line hover:text-bb-red mr-2"
+            onClick={destroyTask}
+          ></i>
+          <i
+            className="text-2xl text-center transition duration-300
              ease-in-out ri-edit-line hover:text-bb-yellow"
             onClick={updateTask}
           ></i>
@@ -73,7 +88,7 @@ const ShowTask = () => {
        text-opacity-50"
       >
         <span>Assigned To : </span>
-        {task?.assigned_user?.name}
+        {task?.assigned_user.name}
       </h2>
       <h2 className="pb-3 mb-3 text-md leading-5 text-bb-gray-600 text-opacity-50">
         <span>Created By : </span>
