@@ -68,5 +68,5 @@ class TasksController < ApplicationController
       if is_editing_restricted_params && is_not_owner
         authorization_error
       end
-  end
+    end
 end
