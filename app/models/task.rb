@@ -9,6 +9,7 @@ class Task < ApplicationRecord
   validates :slug, uniqueness: true
   validate :slug_not_changed
   before_create :set_slug
+  after_create :log_task_details
   belongs_to :user
   has_many :comments, dependent: :destroy
 
@@ -44,5 +45,8 @@ class Task < ApplicationRecord
       if slug_changed? && self.persisted?
         errors.add(:slug, t("task.slug.immutable"))
       end
-      end
+    end
+    def log_task_details
+      TaskLoggerJob.perform_later(self)
+    end
 end
