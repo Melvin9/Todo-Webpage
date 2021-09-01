@@ -39,6 +39,8 @@ group :development, :test do
   gem "faker"
   gem "pundit"
   gem "sidekiq"
+  gem "sidekiq-cron"
+  gem "letter_opener", group: :development
 
 end
 
