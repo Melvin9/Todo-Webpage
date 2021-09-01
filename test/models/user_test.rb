@@ -14,6 +14,16 @@ class UserTest < ActiveSupport::TestCase
     assert_equal ["Name can't be blank"], @user.errors.full_messages
   end
 
+  def test_preference_created_is_valid
+    @user.save
+    assert @user.preference.valid?
+  end
+
+  def test_notification_delivery_hour_uses_default_value
+    @user.save
+    assert_equal @user.preference.notification_delivery_hour, Constants::DEFAULT_NOTIFICATION_DELIVERY_HOUR
+  end
+
   def test_name_should_be_of_valid_length
     @user.name = "a" * 50
     assert @user.invalid?
