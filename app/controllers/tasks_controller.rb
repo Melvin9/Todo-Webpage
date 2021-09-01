@@ -7,6 +7,8 @@ class TasksController < ApplicationController
   before_action :load_task, only: %i[show update destroy]
   before_action :ensure_authorized_update_to_restricted_attrs, only: %i[update]
 
+  include Authorizable
+
   def index
     tasks = policy_scope(Task)
     @pending_tasks = tasks.of_status(:pending).as_json(include: { user: { only: %i[name id] } })
