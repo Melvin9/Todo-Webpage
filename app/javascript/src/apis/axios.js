@@ -2,6 +2,8 @@ import axios from "axios";
 import Toastr from "components/Common/Toastr";
 import { setToLocalStorage, getFromLocalStorage } from "helpers/storage.js";
 
+const DEFAULT_ERROR_NOTIFICATION = "Something went wrong!";
+
 axios.defaults.baseURL = "/";
 
 export const setAuthHeaders = (setLoading = () => null) => {
@@ -31,21 +33,17 @@ const handleSuccessResponse = response => {
   return response;
 };
 
-const handleErrorResponse = error => {
-  if (error.response?.status === 401) {
+const handleErrorResponse = axiosErrorObject => {
+  if (axiosErrorObject.response?.status === 401) {
     setToLocalStorage({ authToken: null, email: null, userId: null });
   }
   Toastr.error(
-    error.response?.data?.error ||
-      error.response?.data?.notice ||
-      error.message ||
-      error.notice ||
-      "Something went wrong!"
+    axiosErrorObject.response?.data?.error || DEFAULT_ERROR_NOTIFICATION
   );
-  if (error.response?.status === 423) {
+  if (axiosErrorObject.response?.status === 423) {
     window.location.href = "/";
   }
-  return Promise.reject(error);
+  return Promise.reject(axiosErrorObject);
 };
 
 export const registerIntercepts = () => {
@@ -53,6 +51,7 @@ export const registerIntercepts = () => {
     handleErrorResponse(error)
   );
 };
+
 export const resetAuthTokens = () => {
   delete axios.defaults.headers["X-Auth-Email"];
   delete axios.defaults.headers["X-Auth-Token"];

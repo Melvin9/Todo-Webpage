@@ -12,7 +12,6 @@ const NavBar = () => {
       setToLocalStorage({
         authToken: null,
         email: null,
-        userId: null,
         userName: null
       });
       resetAuthTokens();
