@@ -7,7 +7,6 @@ class SeedSlugValueForExistingTasks < ActiveRecord::Migration[6.1]
       task.save(validate: false)
     end
   end
-
   def down
     Task.find_each do |task|
       task.update(slug: nil)
